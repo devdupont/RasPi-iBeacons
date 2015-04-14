@@ -20,10 +20,12 @@ class SenderViewController: UIViewController, UIApplicationDelegate, CBPeriphera
     let uuid = NSUUID(UUIDString: "E20A39F4-73F5-4BC4-A12F-17D1AD07A962")
     let majorValue = 0
     let minorValue = 0
+    let majorHex = "00 00"
+    let minorHex = "00 00"
     let idString = "iPhone.Beacon"
     
-    let serverLocation = "https://myserver.azure-mobile.net/"
-    let serverApplicationKey = ""
+    let serverLocation = "https://myservice.azure-mobile.net/"
+    let serverApplicationKey = "applicationKey"
     
     var client: MSClient?
     var peripheralManager = CBPeripheralManager()
@@ -49,12 +51,13 @@ class SenderViewController: UIViewController, UIApplicationDelegate, CBPeriphera
     @IBAction func sendToServer() {
         println("Button Pressed")
         //Create new row item where column "uuid" is uuidString
-        let item = ["uuid":uuidString]
-        if (self.client? != nil) {
+        let item = ["uuid":uuidString+" "+majorHex+" "+minorHex]
+        println("Sending: " + uuidString + " " + majorHex + " " + minorHex)
+        if (self.client != nil) {
             println("Getting Table")
             SendStatusLabel.text = "Getting Table"
             //Fetch table "Beacons"
-            let itemTable = client!.tableWithName("Beacons")
+            let itemTable = client!.tableWithName("Item")
             println("Inserting new item")
             SendStatusLabel.text = "Inserting"
             //Insert new row into "Beacons"
@@ -85,7 +88,7 @@ class SenderViewController: UIViewController, UIApplicationDelegate, CBPeriphera
     func peripheralManagerDidUpdateState(peripheral: CBPeripheralManager!) {
         switch peripheral.state {
         case CBPeripheralManagerState.PoweredOn:
-            self.peripheralManager.startAdvertising(self.advertisedData)
+            self.peripheralManager.startAdvertising(self.advertisedData as [NSObject : AnyObject])
             println("Powered On State")
         case CBPeripheralManagerState.PoweredOff:
             self.peripheralManager.stopAdvertising()

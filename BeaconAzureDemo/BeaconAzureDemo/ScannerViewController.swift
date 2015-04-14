@@ -51,7 +51,7 @@ class ScannerViewController: UIViewController, CLLocationManagerDelegate
         let knownBeacons = beacons.filter{ $0.proximity != CLProximity.Unknown }
         println(knownBeacons)
         if (knownBeacons.count > 0) {
-            let closestBeacon = knownBeacons[0] as CLBeacon
+            let closestBeacon = knownBeacons[0] as! CLBeacon
             let beaconMinorValue = closestBeacon.minor.integerValue
             self.view.backgroundColor = self.colors[beaconMinorValue]!
             self.statusLabel.text = self.status[beaconMinorValue]

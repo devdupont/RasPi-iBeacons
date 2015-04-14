@@ -31,7 +31,7 @@ def sanitizeBLEPacket(blePacket):
 #Queries beaconDB for rows where 'text' == blePacket
 #Returns first ID from query results else empty string
 def queryAzureDB(blePacket):
-	cursor.execute("select id, text from [Item] where text = ?" , blePacket) #Edit query info
+    cursor.execute("select id, uuid from [Item] where uuid = ?" , blePacket[:len(blePacket)-6]]) #Edit query info
 	rows = cursor.fetchall()
 	#print(rows)
 	if rows: return rows[0][0]
